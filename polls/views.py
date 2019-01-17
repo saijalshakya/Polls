@@ -1,6 +1,7 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from .models import Questions
 from django.template import loader
+from django.shortcuts import get_object_or_404, render
 
 def index(request):
     latest_question_list = Questions.objects.order_by('pub_date')[:5]
@@ -10,7 +11,15 @@ def index(request):
 
 
 def detail(request, question_id):
-    return HttpResponse("You're looking at questions %s." % question_id)
+
+    # try:
+    #     question = Questions.objects.get(pk=question_id)
+    # except Questions.DoesNotExist:
+    #     raise Http404("Questions does not exists")
+    # return HttpResponse("You're looking at questions %s." % question_id)
+
+    question = get_object_or_404(Questions, pk=question_id)
+    return render(request, 'polls/detail.html', {'question': question})
 
 
 def results(request, question_id):
