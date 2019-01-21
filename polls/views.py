@@ -14,21 +14,14 @@ class IndexView(generic.ListView):
         return Questions.objects.order_by('-pub_date')[:5]
 
 
-def detail(request, question_id):
-
-    # try:
-    #     question = Questions.objects.get(pk=question_id)
-    # except Questions.DoesNotExist:
-    #     raise Http404("Questions does not exists")
-    # return HttpResponse("You're looking at questions %s." % question_id)
-
-    question = get_object_or_404(Questions, pk=question_id)
-    return render(request, 'polls/detail.html', {'question': question})
+class DetailView(generic.DetailView):
+    model = Questions
+    template_name = 'polls/detail.html'
 
 
-def results(request, question_id):
-    question = get_object_or_404(Questions, pk=question_id)
-    return render(request, 'polls/results.html', {'question': question})
+class ResultsView(generic.DetailView):
+    model = Questions
+    template_name = 'polls/results.html'
 
 
 def vote(request, question_id):
